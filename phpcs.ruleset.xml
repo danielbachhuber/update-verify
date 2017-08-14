@@ -7,6 +7,8 @@
 
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/features/*</exclude-pattern>
+	<exclude-pattern>*/utils/*</exclude-pattern>
 
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<exclude-pattern>*/src/*</exclude-pattern>
