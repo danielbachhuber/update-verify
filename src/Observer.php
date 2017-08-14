@@ -18,6 +18,9 @@ class Observer {
 	 * @param false $retval Returns false to continue the process.
 	 */
 	public static function filter_upgrader_pre_download( $retval ) {
+		self::log_message( 'Fetching pre-update site response...' );
+		$response = self::get_site_response();
+		self::log_message( 'HTTP status code: ' . $response['status_code'] );
 		return $retval;
 	}
 
@@ -28,6 +31,22 @@ class Observer {
 	 * @param array  $result   Result of the upgrade process.
 	 */
 	public static function action_upgrader_process_complete( $upgrader, $result ) {
+		self::log_message( 'Fetching post-update site response...' );
+		$response = self::get_site_response();
+		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+	}
+
+	/**
+	 * Log a message to STDOUT
+	 *
+	 * @param string $message Message to render.
+	 */
+	private static function log_message( $message ) {
+		if ( class_exists( 'WP_CLI' ) ) {
+			\WP_CLI::log( $message );
+		} else {
+			echo $message . PHP_EOL;
+		}
 	}
 
 	/**
