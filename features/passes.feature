@@ -1,7 +1,12 @@
 Feature: Update verification passes
 
-  Scenario: Update verification passes for a standard WP install
+  Background:
     Given a WP install
+    And I run `wp option update home 'http://localhost:8080'`
+    And I run `wp option update siteurl 'http://localhost:8080'`
+    And I launch in the background `wp server --host=localhost --port=8080`
+
+  Scenario: Update verification passes for a standard WP install
 
     When I run `wp core download --version=4.8 --force`
     Then STDOUT should contain:
