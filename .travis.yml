@@ -20,6 +20,8 @@ matrix:
   include:
     - php: 5.6
       env: WP_TRAVISCI=phpcs
+    - php: 5.6
+      env: WP_TRAVISCI=behat
 
 before_script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -35,12 +37,24 @@ before_script:
       fi
     fi
   - |
+    if [[ "$WP_TRAVISCI" == "behat" ]] ; then
+      composer install
+      composer global require consolidation/cgr
+      cgr wp-cli/wp-cli
+      cgr "behat/behat=~2.5"
+      bash bin/install-package-tests.sh
+    fi
+  - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       composer global require wp-coding-standards/wpcs
       phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
     fi
 
 script:
+  - |
+    if [[ "$WP_TRAVISCI" == "behat" ]] ; then
+      behat
+    fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       phpcs --standard=phpcs.ruleset.xml $(find . -name '*.php')
