@@ -56,9 +56,9 @@ class Observer {
 		$stripped_body = strip_tags( $response['body'] );
 		if ( false !== stripos( $stripped_body, 'Fatal error: Uncaught Error:' )
 			|| false !== stripos( $stripped_body, 'Fatal error:  Uncaught Error:' ) ) {
-			self::log_message( 'Detected fatal uncaught error.' );
+			self::log_message( 'Detected uncaught fatal error.' );
 		} else {
-			self::log_message( 'No fatal uncaught error detected.' );
+			self::log_message( 'No uncaught fatal error detected.' );
 		}
 	}
 
