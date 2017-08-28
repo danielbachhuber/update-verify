@@ -25,10 +25,15 @@ Feature: Update verification passes
       """
       Fetching pre-update site response...
       HTTP status code: 200
+      No fatal uncaught error detected.
       """
     And STDOUT should contain:
       """
       Fetching post-update site response...
       HTTP status code: 200
+      No fatal uncaught error detected.
+      """
+    And STDOUT should contain:
+      """
       Success: WordPress updated successfully.
       """

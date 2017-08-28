@@ -1,4 +1,4 @@
-Feature: Verification fails when http code changes
+Feature: Verification fails when there's an uncaught fatal
 
   Background:
     Given a WP install
@@ -6,13 +6,13 @@ Feature: Verification fails when http code changes
     And I run `wp option update siteurl 'http://localhost:8080'`
     And I launch in the background `wp server --host=localhost --port=8080`
 
-  Scenario: Verification fails when 500 http code is returned
+  Scenario: Verification fails when there's an uncaught fatal
     Given a wp-content/mu-plugins/fail.php file:
       """
       <?php
+      ini_set('display_errors', 1);
       if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
-        status_header( 500 );
-        exit;
+        this_is_an_undefined_function();
       }
       """
 
@@ -38,8 +38,8 @@ Feature: Verification fails when http code changes
     And STDOUT should contain:
       """
       Fetching post-update site response...
-      HTTP status code: 500
-      No fatal uncaught error detected.
+      HTTP status code: 200
+      Detected fatal uncaught error.
       """
     And STDOUT should contain:
       """
