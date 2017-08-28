@@ -43,7 +43,7 @@ class Observer {
 		if ( class_exists( 'WP_CLI' ) ) {
 			\WP_CLI::log( $message );
 		} else {
-			echo $message . PHP_EOL;
+			echo htmlentities( $message ) . PHP_EOL;
 		}
 	}
 
