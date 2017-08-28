@@ -8,5 +8,10 @@
             "email": "daniel@handbuilt.co"
         }
     ],
+    "autoload": {
+        "files": [
+            "wp-cli-load.php"
+        ]
+    },
     "require": {}
 }
