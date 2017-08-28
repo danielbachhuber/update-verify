@@ -43,7 +43,7 @@ class Observer {
 		if ( class_exists( 'WP_CLI' ) ) {
 			\WP_CLI::log( $message );
 		} else {
-			echo $message . PHP_EOL;
+			echo htmlentities( $message ) . PHP_EOL;
 		}
 	}
 
@@ -53,6 +53,11 @@ class Observer {
 	private static function check_site_response() {
 		$response = self::get_site_response();
 		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+		if ( false === stripos( $response['body'], '</body>' ) ) {
+			self::log_message( 'No closing </body> tag detected.' );
+		} else {
+			self::log_message( 'Detected closing </body> tag.' );
+		}
 		$stripped_body = strip_tags( $response['body'] );
 		if ( false !== stripos( $stripped_body, 'Fatal error:' ) ) {
 			self::log_message( 'Detected uncaught fatal error.' );
