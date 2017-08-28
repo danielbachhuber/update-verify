@@ -40,7 +40,7 @@ Feature: Verification fails when there's an uncaught fatal
       """
       Fetching post-update site response...
       HTTP status code: 200
-      Detected closing </body> tag.
+      No closing </body> tag detected.
       Detected uncaught fatal error.
       """
     And STDOUT should contain:
