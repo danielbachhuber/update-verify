@@ -33,11 +33,13 @@ Feature: Verification fails when http code changes
       """
       Fetching pre-update site response...
       HTTP status code: 200
+      No uncaught fatal error detected.
       """
     And STDOUT should contain:
       """
       Fetching post-update site response...
       HTTP status code: 500
+      No uncaught fatal error detected.
       """
     And STDOUT should contain:
       """

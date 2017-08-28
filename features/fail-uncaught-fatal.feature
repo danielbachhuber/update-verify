@@ -1,4 +1,4 @@
-Feature: Update verification passes
+Feature: Verification fails when there's an uncaught fatal
 
   Background:
     Given a WP install
@@ -6,9 +6,17 @@ Feature: Update verification passes
     And I run `wp option update siteurl 'http://localhost:8080'`
     And I launch in the background `wp server --host=localhost --port=8080`
 
-  Scenario: Update verification passes for a standard WP install
+  Scenario: Verification fails when there's an uncaught fatal
+    Given a wp-content/mu-plugins/fail.php file:
+      """
+      <?php
+      ini_set('display_errors', 1);
+      if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
+        this_is_an_undefined_function();
+      }
+      """
 
-    When I run `wp core download --version=4.8 --force`
+    When I run `wp core download --version=4.7 --force`
     Then STDOUT should contain:
       """
       Success: WordPress downloaded.
@@ -17,7 +25,7 @@ Feature: Update verification passes
     When I run `wp core version`
     Then STDOUT should be:
       """
-      4.8
+      4.7
       """
 
     When I run `wp core update`
@@ -31,7 +39,7 @@ Feature: Update verification passes
       """
       Fetching post-update site response...
       HTTP status code: 200
-      No uncaught fatal error detected.
+      Detected uncaught fatal error.
       """
     And STDOUT should contain:
       """

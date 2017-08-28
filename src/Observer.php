@@ -19,8 +19,7 @@ class Observer {
 	 */
 	public static function filter_upgrader_pre_download( $retval ) {
 		self::log_message( 'Fetching pre-update site response...' );
-		$response = self::get_site_response();
-		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+		self::check_site_response();
 		return $retval;
 	}
 
@@ -32,8 +31,7 @@ class Observer {
 	 */
 	public static function action_upgrader_process_complete( $upgrader, $result ) {
 		self::log_message( 'Fetching post-update site response...' );
-		$response = self::get_site_response();
-		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+		self::check_site_response();
 	}
 
 	/**
@@ -46,6 +44,20 @@ class Observer {
 			\WP_CLI::log( $message );
 		} else {
 			echo $message . PHP_EOL;
+		}
+	}
+
+	/**
+	 * Check a site response for basic operating details and log output
+	 */
+	private static function check_site_response() {
+		$response = self::get_site_response();
+		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+		$stripped_body = strip_tags( $response['body'] );
+		if ( false !== stripos( $stripped_body, 'Fatal error:' ) ) {
+			self::log_message( 'Detected uncaught fatal error.' );
+		} else {
+			self::log_message( 'No uncaught fatal error detected.' );
 		}
 	}
 
