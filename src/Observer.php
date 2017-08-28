@@ -54,13 +54,13 @@ class Observer {
 		$response = self::get_site_response();
 		self::log_message( 'HTTP status code: ' . $response['status_code'] );
 		$stripped_body = strip_tags( $response['body'] );
-		self::log_message( $response['body'] );
 		if ( false !== stripos( $stripped_body, 'Fatal error: Uncaught Error:' )
 			|| false !== stripos( $stripped_body, 'Fatal error:  Uncaught Error:' ) ) {
 			self::log_message( 'Detected uncaught fatal error.' );
 		} else {
 			self::log_message( 'No uncaught fatal error detected.' );
 		}
+		self::log_message( $response['body'] );
 	}
 
 	/**
