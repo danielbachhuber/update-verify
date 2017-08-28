@@ -1,21 +1,17 @@
 {
     "name": "danielbachhuber/update-verify",
-    "description": "Verify the WordPress update process.",
-    "license": "GPL v2+",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "autoload": {
-        "psr-4": { "UpdateVerify\\": "src" },
-        "files": [ "wp-cli-load.php" ]
-    },
-    "require": {},
-    "require-dev": {
-        "wp-cli/wp-cli": "*",
-        "behat/behat": "~2.5"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
+    "description": "Verifies the WordPress update process",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bachhuber",
+            "email": "daniel@handbuilt.co"
         }
-    }
+    ],
+    "autoload": {
+        "files": [
+            "wp-cli-load.php"
+        ]
+    },
+    "require": {}
 }
