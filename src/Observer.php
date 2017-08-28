@@ -64,7 +64,6 @@ class Observer {
 		} else {
 			self::log_message( 'No uncaught fatal error detected.' );
 		}
-		self::log_message( $response['body'] );
 	}
 
 	/**
