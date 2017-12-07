@@ -53,6 +53,29 @@ class CLI {
 			}, 10, 2
 		);
 
+		/**
+		 * Roll back to prior version if errors were detected post-update.
+		 */
+		WP_CLI::add_wp_hook(
+			'upgrade_verify_upgrader_process_complete', function( $site_response ) use ( $current_version ) {
+				$error_message = '';
+				if ( 200 !== $site_response['status_code'] ) {
+					$error_message = sprintf( 'Failed post-update status code check (HTTP code %d).', $site_response['status_code'] );
+				} elseif ( ! empty( $site_response['php_fatal'] ) ) {
+					$error_message = 'Failed post-update PHP fatal error check.';
+				} elseif ( empty( $site_response['closing_body'] ) ) {
+					$error_message = 'Failed post-update closing </body> tag check.';
+				}
+				if ( ! empty( $error_message ) ) {
+					WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
+					WP_CLI::runcommand( 'core download --force --version=' . $current_version, array(
+						'launch' => false,
+					) );
+					WP_CLI::error( $error_message );
+				}
+			}
+		);
+
 		$update_version = ! empty( $assoc_args['version'] ) ? ' --version=' . $assoc_args['version'] : '';
 		$response       = WP_CLI::runcommand(
 			'core update' . $update_version, array(

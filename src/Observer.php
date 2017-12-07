@@ -42,7 +42,14 @@ class Observer {
 	 */
 	public static function action_upgrader_process_complete( $upgrader, $result ) {
 		self::log_message( 'Fetching post-update site response...' );
-		self::check_site_response();
+		$site_response = self::check_site_response();
+		/**
+		 * Permit action based on the post-update site response check.
+		 *
+		 * @param array       $site_response Values for the site heuristics check.
+		 * @param WP_Upgrader $upgrader      The WP_Upgrader instance.
+		 */
+		do_action( 'upgrade_verify_upgrader_process_complete', $site_response, $upgrader );
 	}
 
 	/**
