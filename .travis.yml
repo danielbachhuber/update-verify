@@ -59,7 +59,7 @@ before_script:
 script:
   - |
     if [[ "$WP_TRAVISCI" == "behat" ]] ; then
-      behat
+      bash bin/test.sh
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
