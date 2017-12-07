@@ -28,7 +28,7 @@ class Observer {
 		 * @param mixed       $retval        Return value to WP_Upgrader.
 		 * @param array       $site_response Values for the site heuristics check.
 		 * @param string      $package       The package file name.
-		  * @param WP_Upgrader $upgrader      The WP_Upgrader instance.
+		 * @param WP_Upgrader $upgrader      The WP_Upgrader instance.
 		 */
 		$retval = apply_filters( 'upgrade_verify_upgrader_pre_download', $retval, $site_response, $package, $upgrader );
 		return $retval;
