@@ -44,10 +44,10 @@ class CLI {
 			'upgrade_verify_upgrader_pre_download', function( $retval, $site_response ) {
 				if ( 200 !== $site_response['status_code'] ) {
 					return new WP_Error( 'upgrade_verify_fail', sprintf( 'Failed pre-update status code check (HTTP code %d).', $site_response['status_code'] ) );
-				} elseif ( empty( $site_response['closing_body'] ) ) {
-					return new WP_Error( 'upgrade_verify_fail', 'Failed pre-update closing </body> tag check.' );
 				} elseif ( ! empty( $site_response['php_fatal'] ) ) {
 					return new WP_Error( 'upgrade_verify_fail', 'Failed pre-update PHP fatal error check.' );
+				} elseif ( empty( $site_response['closing_body'] ) ) {
+					return new WP_Error( 'upgrade_verify_fail', 'Failed pre-update closing </body> tag check.' );
 				}
 				return $retval;
 			}, 10, 2
