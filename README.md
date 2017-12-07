@@ -61,13 +61,15 @@ To use the heuristics to influence the update process, run the `wp core safe-upd
 
 Update Verify can be installed as a WP-CLI package or as a WordPress plugin.
 
-To install as a WordPress plugin, which means Update Verify will be executed during web-based updates:
+Installing as a WP-CLI package means Update Verify can be used globally on a server and will only execute during CLI-based updates:
+
+    wp package install danielbachhuber/update-verify
+
+Installing as a plugin to means Update Verify can also be executed during web-based updates:
 
     wp plugin install --activate https://github.com/danielbachhuber/update-verify
 
-To install as a WP-CLI package, which means Update Verify can be used globally on a server and will only execute during CLI-based updates:
-
-    wp package install danielbachhuber/update-verify
+Both installation methods expose the `wp core safe-update` WP-CLI command.
 
 ## Changelog ##
 
