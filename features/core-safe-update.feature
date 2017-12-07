@@ -8,7 +8,7 @@ Feature: Safely update WordPress core
     And I run `wp option update siteurl 'http://localhost:8080'`
     And I launch in the background `wp server --host=localhost --port=8080`
 
-  Scenario: core safe-update updates WordPress successfully
+  Scenario: core safe-update without --version updates WordPress successfully
     When I run `wp core safe-update`
     Then STDOUT should contain:
       """
@@ -17,6 +17,23 @@ Feature: Safely update WordPress core
     And STDOUT should contain:
       """
       Success: WordPress updated successfully.
+      """
+
+  Scenario: core safe-update with --version updates WordPress successfully
+    When I run `wp core safe-update --version=4.7.4`
+    Then STDOUT should contain:
+      """
+      Fetching post-update site response...
+      """
+    And STDOUT should contain:
+      """
+      Success: WordPress updated successfully.
+      """
+
+    When I run `wp core version`
+    Then STDOUT should be:
+      """
+      4.7.4
       """
 
   Scenario: Early failed HTTP status code prevents core safe-update
