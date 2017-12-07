@@ -70,15 +70,17 @@ class Observer {
 	 * Capture basic operating details
 	 */
 	private static function get_site_response() {
-		$response = wp_remote_post( get_option( 'home' ), array(
-			'timeout'  => 5,
-		) );
+		$response = wp_remote_post(
+			get_option( 'home' ), array(
+				'timeout' => 5,
+			)
+		);
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 		return array(
-			'status_code'    => (int) wp_remote_retrieve_response_code( $response ),
-			'body'           => wp_remote_retrieve_body( $response ),
+			'status_code' => (int) wp_remote_retrieve_response_code( $response ),
+			'body'        => wp_remote_retrieve_body( $response ),
 		);
 	}
 
