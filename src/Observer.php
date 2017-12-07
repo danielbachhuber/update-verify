@@ -15,11 +15,22 @@ class Observer {
 	/**
 	 * Fires near the beginning of the upgrade process
 	 *
-	 * @param false $retval Returns false to continue the process.
+	 * @param false       $retval   Returns false to continue the process.
+	 * @param string      $package  The package file name.
+	 * @param WP_Upgrader $upgrader The WP_Upgrader instance.
 	 */
-	public static function filter_upgrader_pre_download( $retval ) {
+	public static function filter_upgrader_pre_download( $retval, $package, $upgrader ) {
 		self::log_message( 'Fetching pre-update site response...' );
-		self::check_site_response();
+		$site_response = self::check_site_response();
+		/**
+		 * Permit modification of $retval based on the site response.
+		 *
+		 * @param mixed       $retval        Return value to WP_Upgrader.
+		 * @param array       $site_response Values for the site heuristics check.
+		 * @param string      $package       The package file name.
+		 * @param WP_Upgrader $upgrader      The WP_Upgrader instance.
+		 */
+		$retval = apply_filters( 'upgrade_verify_upgrader_pre_download', $retval, $site_response, $package, $upgrader );
 		return $retval;
 	}
 
@@ -48,22 +59,34 @@ class Observer {
 	}
 
 	/**
-	 * Check a site response for basic operating details and log output
+	 * Check a site response for basic operating details and log output.
+	 *
+	 * @return array Response data.
 	 */
 	private static function check_site_response() {
 		$response = self::get_site_response();
 		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+		$site_response = array(
+			'status_code'  => $response['status_code'],
+			'closing_body' => null,
+			'php_fatal'    => null,
+		);
 		if ( false === stripos( $response['body'], '</body>' ) ) {
 			self::log_message( 'No closing </body> tag detected.' );
+			$site_response['closing_body'] = false;
 		} else {
 			self::log_message( 'Detected closing </body> tag.' );
+			$site_response['closing_body'] = true;
 		}
 		$stripped_body = strip_tags( $response['body'] );
 		if ( false !== stripos( $stripped_body, 'Fatal error:' ) ) {
 			self::log_message( 'Detected uncaught fatal error.' );
+			$site_response['php_fatal'] = true;
 		} else {
 			self::log_message( 'No uncaught fatal error detected.' );
+			$site_response['php_fatal'] = false;
 		}
+		return $site_response;
 	}
 
 	/**

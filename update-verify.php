@@ -13,7 +13,12 @@
  * @package Update-Verify
  */
 
+require_once dirname( __FILE__ ) . '/src/CLI.php';
 require_once dirname( __FILE__ ) . '/src/Observer.php';
 
-add_filter( 'upgrader_pre_download', array( 'UpdateVerify\Observer', 'filter_upgrader_pre_download' ) );
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	WP_CLI::add_command( 'core safe-update', array( 'UpdateVerify\CLI', 'safe_update' ) );
+}
+
+add_filter( 'upgrader_pre_download', array( 'UpdateVerify\Observer', 'filter_upgrader_pre_download' ), 10, 3 );
 add_filter( 'upgrader_process_complete', array( 'UpdateVerify\Observer', 'action_upgrader_process_complete' ), 10, 2 );

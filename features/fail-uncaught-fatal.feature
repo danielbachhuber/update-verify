@@ -22,6 +22,12 @@ Feature: Verification fails when there's an uncaught fatal
       Success: WordPress downloaded.
       """
 
+    When I run `wp theme activate twentysixteen`
+    Then STDOUT should contain:
+      """
+      Success:
+      """
+
     When I run `wp core version`
     Then STDOUT should be:
       """
