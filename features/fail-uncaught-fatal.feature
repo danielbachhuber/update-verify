@@ -10,8 +10,9 @@ Feature: Verification fails when there's an uncaught fatal
     Given a wp-content/mu-plugins/fail.php file:
       """
       <?php
-      ini_set('display_errors', 1);
       if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
+        ini_set('display_errors', 1);
+        echo 'Fatal error: foo bar';
         this_is_an_undefined_function();
       }
       """
