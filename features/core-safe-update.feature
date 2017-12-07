@@ -111,3 +111,58 @@ Feature: Safely update WordPress core
       """
       4.6
       """
+
+  Scenario: Post-update failed HTTP status code causes rollback
+    Given a wp-content/mu-plugins/fail.php file:
+      """
+      <?php
+      if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+        if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
+          status_header( 500 );
+          exit;
+        }
+      }
+      """
+
+    When I try `wp core safe-update`
+    Then STDERR should be:
+      """
+      Error: Failed post-update status code check (HTTP code 500).
+      """
+    And STDOUT should contain:
+      """
+      Rolling WordPress back to version 4.6...
+      """
+
+    When I run `wp core version`
+    Then STDOUT should be:
+      """
+      4.6
+      """
+
+  Scenario: Post-update failed </body> tag check causes rollback
+    Given a wp-content/mu-plugins/fail.php file:
+      """
+      <?php
+      if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+        if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
+          exit;
+        }
+      }
+      """
+
+    When I try `wp core safe-update`
+    Then STDERR should be:
+      """
+      Error: Failed post-update closing </body> tag check.
+      """
+    And STDOUT should contain:
+      """
+      Rolling WordPress back to version 4.6...
+      """
+
+    When I run `wp core version`
+    Then STDOUT should be:
+      """
+      4.6
+      """

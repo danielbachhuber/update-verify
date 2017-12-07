@@ -23,7 +23,26 @@ Because Update Verify hooks into the WordPress update process, the default behav
 
 To control the update process based on the heuristics, use the `wp core safe-update` WP-CLI command:
 
+    ###
+    # 500 status code is observed while updating from WP 4.6 to 4.9
+    ###
     $ wp core safe-update
+    Currently running version 4.6
+    Updating to version 4.9.1 (en_US)...
+    Fetching pre-update site response...
+    HTTP status code: 200
+    Detected closing </body> tag.
+    No uncaught fatal error detected.
+    Unpacking the update...
+    Fetching post-update site response...
+    HTTP status code: 500
+    No closing </body> tag detected.
+    No uncaught fatal error detected.
+    Rolling WordPress back to version 4.6...
+    Downloading WordPress 4.6 (en_US)...
+    154 files cleaned up.
+    Success: WordPress downloaded.
+    Error: Failed post-update status code check (HTTP code 500).
 
 Under the hood, this WP-CLI command aborts the update process if it detects WordPress to already be broken, and rolls back to the prior WordPress version if the update process caused detectable breakage.
 
