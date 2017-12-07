@@ -11,19 +11,25 @@ Verifies the WordPress update process
 
 ## Description ##
 
-Compares details about the WordPress instance before and after update to determine whether an update was successful.
+Verifies the WordPress update process by comparing details about the WordPress installation before and after the update.
 
-Uses a HTTP GET request to the homepage to capture:
+Captured in a HTTP GET request against the home URL, the heuristics include:
 
-* HTTP status code.
-* Whether or not a fatal error is detected.
+* HTTP status code (200 or otherwise).
+* Whether or not a PHP fatal error is detected.
 * Whether or not the closing `</body>` tag is detected.
 
-Based on these characteristics, the underlying subsystem can make a determination of whether the update was successful (or if a rollback needs to be initiated).
+Because Update Verify hooks into the WordPress update process, the default behavior is to output this heuristic information alongside web or CLI update output.
+
+To control the update process based on the heuristics, use the `wp core safe-update` WP-CLI command:
+
+    $ wp core safe-update
+
+Under the hood, this WP-CLI command aborts the update process if it detects WordPress to already be broken, and rolls back to the prior WordPress version if the update process caused detectable breakage.
 
 ## Installation ##
 
-Update Verify can be installed as a WordPress plugin or as a WP-CLI package.
+Update Verify can be installed as a WP-CLI package or as a WordPress plugin.
 
 To install as a WordPress plugin, which means Update Verify will be executed during web-based updates:
 

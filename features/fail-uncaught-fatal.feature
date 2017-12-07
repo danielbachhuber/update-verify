@@ -2,6 +2,8 @@ Feature: Verification fails when there's an uncaught fatal
 
   Background:
     Given a WP install
+    And I run `wp core download --force --version=4.6`
+    And I run `wp theme activate twentysixteen`
     And I run `wp option update home 'http://localhost:8080'`
     And I run `wp option update siteurl 'http://localhost:8080'`
     And I launch in the background `wp server --host=localhost --port=8080`
@@ -14,24 +16,6 @@ Feature: Verification fails when there's an uncaught fatal
       if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
         this_is_an_undefined_function();
       }
-      """
-
-    When I run `wp core download --version=4.7 --force`
-    Then STDOUT should contain:
-      """
-      Success: WordPress downloaded.
-      """
-
-    When I run `wp theme activate twentysixteen`
-    Then STDOUT should contain:
-      """
-      Success:
-      """
-
-    When I run `wp core version`
-    Then STDOUT should be:
-      """
-      4.7
       """
 
     When I run `wp core update`
