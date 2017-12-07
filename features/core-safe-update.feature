@@ -72,13 +72,12 @@ Feature: Safely update WordPress core
       4.6
       """
 
-   Scenario: Early failed PHP fatal error check prevents core safe update
+   Scenario: Early failed closing </body> tag check prevents core safe update
     Given a wp-content/mu-plugins/fail.php file:
       """
       <?php
       if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-        ini_set('display_errors', 1);
-        this_is_an_undefined_function();
+        exit;
       }
       """
 
