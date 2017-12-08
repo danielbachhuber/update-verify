@@ -71,6 +71,9 @@ class CLI {
 					$error_message = 'Failed post-update closing </body> tag check.';
 				}
 				if ( ! empty( $error_message ) ) {
+					if ( method_exists( 'WP_Upgrader', 'release_lock' ) ) {
+						\WP_Upgrader::release_lock( 'core_updater' );
+					}
 					WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
 					WP_CLI::runcommand( 'core download --force --version=' . $current_version, array(
 						'launch' => false,
