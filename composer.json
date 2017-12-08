@@ -13,8 +13,5 @@
             "wp-cli-load.php"
         ]
     },
-    "require": {},
-	"require-dev": {
-		"behat/behat": "2.5.*"
-	}
+    "require": {}
 }
