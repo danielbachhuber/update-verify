@@ -10,9 +10,12 @@ Feature: Verification fails when http code changes
     Given a wp-content/mu-plugins/fail.php file:
       """
       <?php
-      if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
-        status_header( 500 );
-        exit;
+      if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+        $_wp_version = preg_replace( '/^.*\$wp_version *= *\'([^\']+)\';.*$/s', '\\1', file_get_contents( ABSPATH . WPINC . '/version.php' ) );
+        if ( version_compare( $_wp_version, '4.8', '>=' ) ) {
+          status_header( 500 );
+          exit;
+        }
       }
       """
 
@@ -21,6 +24,7 @@ Feature: Verification fails when http code changes
       """
       Success: WordPress downloaded.
       """
+    And I run `wp core update-db`
 
     When I run `wp core version`
     Then STDOUT should be:

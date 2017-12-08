@@ -3,6 +3,7 @@ Feature: Safely update WordPress core
   Background:
     Given a WP install
     And I run `wp core download --force --version=4.6`
+    And I run `wp core update-db`
     And I run `wp theme activate twentysixteen`
     And I run `wp option update home 'http://localhost:8080'`
     And I run `wp option update siteurl 'http://localhost:8080'`
@@ -117,7 +118,8 @@ Feature: Safely update WordPress core
       """
       <?php
       if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-        if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
+        $_wp_version = preg_replace( '/^.*\$wp_version *= *\'([^\']+)\';.*$/s', '\\1', file_get_contents( ABSPATH . WPINC . '/version.php' ) );
+        if ( version_compare( $_wp_version, '4.8', '>=' ) ) {
           status_header( 500 );
           exit;
         }
@@ -145,7 +147,8 @@ Feature: Safely update WordPress core
       """
       <?php
       if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-        if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) {
+        $_wp_version = preg_replace( '/^.*\$wp_version *= *\'([^\']+)\';.*$/s', '\\1', file_get_contents( ABSPATH . WPINC . '/version.php' ) );
+        if ( version_compare( $_wp_version, '4.8', '>=' ) ) {
           exit;
         }
       }
