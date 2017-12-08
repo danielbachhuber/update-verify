@@ -72,25 +72,25 @@ class Observer {
 	 */
 	private static function check_site_response() {
 		$response = self::get_site_response();
-		self::log_message( 'HTTP status code: ' . $response['status_code'] );
+		self::log_message( ' -> HTTP status code: ' . $response['status_code'] );
 		$site_response = array(
 			'status_code'  => $response['status_code'],
 			'closing_body' => null,
 			'php_fatal'    => null,
 		);
 		if ( false === stripos( $response['body'], '</body>' ) ) {
-			self::log_message( 'No closing </body> tag detected.' );
+			self::log_message( ' -> No closing </body> tag detected.' );
 			$site_response['closing_body'] = false;
 		} else {
-			self::log_message( 'Detected closing </body> tag.' );
+			self::log_message( ' -> Detected closing </body> tag.' );
 			$site_response['closing_body'] = true;
 		}
 		$stripped_body = strip_tags( $response['body'] );
 		if ( false !== stripos( $stripped_body, 'Fatal error:' ) ) {
-			self::log_message( 'Detected uncaught fatal error.' );
+			self::log_message( ' -> Detected uncaught fatal error.' );
 			$site_response['php_fatal'] = true;
 		} else {
-			self::log_message( 'No uncaught fatal error detected.' );
+			self::log_message( ' -> No uncaught fatal error detected.' );
 			$site_response['php_fatal'] = false;
 		}
 		return $site_response;

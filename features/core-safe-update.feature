@@ -54,9 +54,9 @@ Feature: Safely update WordPress core
     And STDOUT should contain:
       """
       Fetching pre-update site response...
-      HTTP status code: 500
-      No closing </body> tag detected.
-      No uncaught fatal error detected.
+       -> HTTP status code: 500
+       -> No closing </body> tag detected.
+       -> No uncaught fatal error detected.
       """
     And the return code should be 1
 

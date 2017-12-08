@@ -24,16 +24,16 @@ Feature: Update verification passes
     Then STDOUT should contain:
       """
       Fetching pre-update site response...
-      HTTP status code: 200
-      Detected closing </body> tag.
-      No uncaught fatal error detected.
+       -> HTTP status code: 200
+       -> Detected closing </body> tag.
+       -> No uncaught fatal error detected.
       """
     And STDOUT should contain:
       """
       Fetching post-update site response...
-      HTTP status code: 200
-      Detected closing </body> tag.
-      No uncaught fatal error detected.
+       -> HTTP status code: 200
+       -> Detected closing </body> tag.
+       -> No uncaught fatal error detected.
       """
     And STDOUT should contain:
       """

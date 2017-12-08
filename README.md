@@ -19,17 +19,17 @@ Verifies the WordPress update process by comparing heuristics about the WordPres
 
 By default, Update Verify operates in a reporting mode; these heuristics are output alongside standard web or CLI update output.
 
-    $ wp core update
+    $ wp core update --path=/path/to/wordpress
     Updating to version 4.9.1 (en_US)...
     Fetching pre-update site response...
-    HTTP status code: 200
-    Detected closing </body> tag.
-    No uncaught fatal error detected.
+     -> HTTP status code: 200
+     -> Detected closing </body> tag.
+     -> No uncaught fatal error detected.
     Unpacking the update...
     Fetching post-update site response...
-    HTTP status code: 200
-    Detected closing </body> tag.
-    No uncaught fatal error detected.
+     -> HTTP status code: 200
+     -> Detected closing </body> tag.
+     -> No uncaught fatal error detected.
     Cleaning up files...
     No files found that need cleaning up.
     Success: WordPress updated successfully.
@@ -39,18 +39,18 @@ To use the heuristics to influence the update process, run the `wp core safe-upd
     ###
     # 500 status code observed while updating from WP 4.6 to 4.9, and causes rollback.
     ###
-    $ wp core safe-update
+    $ wp core safe-update --path=/path/to/wordpress
     Currently running version 4.6
     Updating to version 4.9.1 (en_US)...
     Fetching pre-update site response...
-    HTTP status code: 200
-    Detected closing </body> tag.
-    No uncaught fatal error detected.
+     -> HTTP status code: 200
+     -> Detected closing </body> tag.
+     -> No uncaught fatal error detected.
     Unpacking the update...
     Fetching post-update site response...
-    HTTP status code: 500
-    No closing </body> tag detected.
-    No uncaught fatal error detected.
+     -> HTTP status code: 500
+     -> No closing </body> tag detected.
+     -> No uncaught fatal error detected.
     Rolling WordPress back to version 4.6...
     Downloading WordPress 4.6 (en_US)...
     154 files cleaned up.
