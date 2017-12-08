@@ -32,16 +32,16 @@ Feature: Verification fails when http code changes
     Then STDOUT should contain:
       """
       Fetching pre-update site response...
-      HTTP status code: 200
-      Detected closing </body> tag.
-      No uncaught fatal error detected.
+       -> HTTP status code: 200
+       -> Detected closing </body> tag.
+       -> No uncaught fatal error detected.
       """
     And STDOUT should contain:
       """
       Fetching post-update site response...
-      HTTP status code: 500
-      No closing </body> tag detected.
-      No uncaught fatal error detected.
+       -> HTTP status code: 500
+       -> No closing </body> tag detected.
+       -> No uncaught fatal error detected.
       """
     And STDOUT should contain:
       """

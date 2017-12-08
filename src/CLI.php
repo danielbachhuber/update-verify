@@ -25,6 +25,10 @@ class CLI {
 	 *
 	 * ## OPTIONS
 	 *
+	 * [--path=<path>]
+	 * : Specify the path in which to update WordPress. Defaults to current
+	 * directory.
+	 *
 	 * [--version=<version>]
 	 * : Update to a specific version, instead of to the latest version.
 	 */
