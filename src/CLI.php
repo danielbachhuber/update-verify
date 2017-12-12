@@ -75,7 +75,7 @@ class CLI {
 						\WP_Upgrader::release_lock( 'core_updater' );
 					}
 					WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
-					WP_CLI::runcommand( 'core download --force --version=' . $current_version, array(
+					WP_CLI::runcommand( 'core download --skip-content --force --version=' . $current_version, array(
 						'launch' => false,
 					) );
 					WP_CLI::error( $error_message );
