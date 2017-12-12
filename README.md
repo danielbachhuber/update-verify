@@ -69,7 +69,7 @@ Installing as a plugin to means Update Verify can also be executed during web-ba
 
     wp plugin install --activate https://github.com/danielbachhuber/update-verify
 
-Both installation methods expose the `wp core safe-update` WP-CLI command.
+Both installation methods expose the `wp core safe-update` WP-CLI command, which requires WP-CLI 1.5.0-alpha-d71d228 or newer.
 
 ## Changelog ##
 
