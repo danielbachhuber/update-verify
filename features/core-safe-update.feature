@@ -169,3 +169,34 @@ Feature: Safely update WordPress core
       """
       4.6
       """
+
+  @less-than-php-7.0
+  Scenario: Updates a really old WordPress install
+    When I run `wp theme install twentythirteen --activate`
+    And I run `wp core download --version=4.0 --force`
+    And "4.0" replaced with "3.6" in the wp-includes/version.php file
+    Then STDOUT should contain:
+      """
+      Success:
+      """
+
+    When I run `wp core safe-update --version=4.2`
+    Then STDOUT should contain:
+      """
+      Currently running version 3.6
+      Detected really old WordPress. First updating to version 3.7...
+      """
+    And STDOUT should contain:
+      """
+      Forced update to WordPress 3.7. Proceeding with remaining update...
+      """
+    And STDOUT should contain:
+      """
+      Success: WordPress updated successfully.
+      """
+
+    When I run `wp core version`
+    Then STDOUT should be:
+      """
+      4.2
+      """
