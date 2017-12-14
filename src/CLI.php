@@ -31,15 +31,20 @@ class CLI {
 	 *
 	 * [--version=<version>]
 	 * : Update to a specific version, instead of to the latest version.
+	 *
+	 * @when before_wp_load
 	 */
 	public static function safe_update( $args, $assoc_args ) {
 
 		$current_version = WP_CLI::runcommand(
 			'core version', array(
 				'return' => true,
+				'launch' => true,
 			)
 		);
 		WP_CLI::log( 'Currently running version ' . $current_version );
+
+		WP_CLI::get_runner()->load_wordpress();
 
 		/**
 		 * Bail early if any errors are detected with the site.
