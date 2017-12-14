@@ -57,6 +57,8 @@ To use the heuristics to influence the update process, run the `wp core safe-upd
     Success: WordPress downloaded.
     Error: Failed post-update status code check (HTTP code 500).
 
+If the update process is successful, all output is written to `STDOUT` and the process returns exit code `0`. If the update process fails in some way (pre- or post-updatE), the final error message is written to `STDERR` and the process returns exit code `1`.
+
 ## Installation ##
 
 Update Verify can be installed as a WP-CLI package or as a WordPress plugin.
