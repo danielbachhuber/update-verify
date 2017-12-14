@@ -21,7 +21,7 @@ class Observer {
 	 */
 	public static function filter_upgrader_pre_download( $retval, $package, $upgrader ) {
 		self::log_message( 'Fetching pre-update site response...' );
-		$site_response = self::check_site_response();
+		$site_response = self::check_site_response( home_url( '/' ) );
 		/**
 		 * Permit modification of $retval based on the site response.
 		 *
@@ -42,7 +42,7 @@ class Observer {
 	 */
 	public static function action_upgrader_process_complete( $upgrader, $result ) {
 		self::log_message( 'Fetching post-update site response...' );
-		$site_response = self::check_site_response();
+		$site_response = self::check_site_response( home_url( '/' ) );
 		/**
 		 * Permit action based on the post-update site response check.
 		 *
@@ -68,10 +68,11 @@ class Observer {
 	/**
 	 * Check a site response for basic operating details and log output.
 	 *
+	 * @param string $url URL to check.
 	 * @return array Response data.
 	 */
-	private static function check_site_response() {
-		$response = self::get_site_response();
+	public static function check_site_response( $url ) {
+		$response = self::get_site_response( $url );
 		self::log_message( ' -> HTTP status code: ' . $response['status_code'] );
 		$site_response = array(
 			'status_code'  => $response['status_code'],
@@ -98,8 +99,17 @@ class Observer {
 
 	/**
 	 * Capture basic operating details
+	 *
+	 * @param string $check_url URL to check.
 	 */
-	private static function get_site_response() {
+	private static function get_site_response( $check_url ) {
+		if ( class_exists( 'Requests' ) ) {
+			$response = \Requests::get( $check_url );
+			return array(
+				'status_code' => (int) $response->status_code,
+				'body'        => $response->body,
+			);
+		}
 		$response = wp_remote_post(
 			get_option( 'home' ), array(
 				'timeout' => 5,
