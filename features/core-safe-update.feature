@@ -170,9 +170,11 @@ Feature: Safely update WordPress core
       4.6
       """
 
+  @less-than-php-7.0
   Scenario: Updates a really old WordPress install
     When I run `wp theme install twentythirteen --activate`
-    And I run `wp core download --version=3.6 --force`
+    And I run `wp core download --version=4.0 --force`
+    And "4.0" replaced with "3.6" in the wp-includes/version.php file
     Then STDOUT should contain:
       """
       Success:
