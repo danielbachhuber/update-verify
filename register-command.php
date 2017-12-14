@@ -1,6 +1,8 @@
 <?php
 /**
  * Registers the WP-CLI command.
+ *
+ * @package Update-Verify
  */
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {

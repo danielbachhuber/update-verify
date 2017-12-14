@@ -8,7 +8,7 @@
 namespace UpdateVerify;
 
 use WP_CLI;
-use WP_Error;
+use WP_CLI\Utils;
 
 /**
  * Provides CLI interfaces to safe upgrades.
@@ -61,7 +61,11 @@ class CLI {
 
 		if ( version_compare( $current_version, '3.7', '<' ) ) {
 			WP_CLI::log( 'Detected really old WordPress. First updating to version 3.7...' );
-			$home_url      = 'http://localhost:8080';
+			self::load_wp_config();
+			$home_url = self::get_home_url();
+			if ( empty( $home_url ) ) {
+				WP_CLI::error( 'No home URL found from database connection.' );
+			}
 			$site_response = Observer::check_site_response( $home_url );
 			$is_errored    = $is_site_response_errored( $site_response, 'pre' );
 			if ( $is_errored ) {
@@ -86,7 +90,8 @@ class CLI {
 			WP_CLI::log( 'Forced update to WordPress 3.7. Proceeding with remaining update...' );
 		}
 
-		WP_CLI::get_runner()->load_wordpress();
+		// @codingStandardsIgnoreLine
+		@WP_CLI::get_runner()->load_wordpress();
 
 		/**
 		 * Bail early if any errors are detected with the site.
@@ -129,6 +134,83 @@ class CLI {
 			)
 		);
 
+	}
+
+	/**
+	 * Load the wp-config.php file into scope.
+	 */
+	private static function load_wp_config() {
+		$path = Utils\locate_wp_config();
+		if ( ! $path ) {
+			WP_CLI::error( "'wp-config.php' not found." );
+		}
+
+		// Load wp-config.php code, in the global scope.
+		$wp_cli_original_defined_vars = get_defined_vars();
+		// @codingStandardsIgnoreLine
+		eval( WP_CLI::get_runner()->get_wp_config_code() );
+		foreach ( get_defined_vars() as $key => $var ) {
+			if ( array_key_exists( $key, $wp_cli_original_defined_vars ) || 'wp_cli_original_defined_vars' === $key ) {
+				continue;
+			}
+			global ${$key};
+			${$key} = $var;
+		}
+	}
+
+	/**
+	 * Get the home URL from the database.
+	 */
+	private static function get_home_url() {
+		global $table_prefix;
+		$assoc_args = array(
+			'host'     => DB_HOST,
+			'user'     => DB_USER,
+			'pass'     => DB_PASSWORD,
+			'database' => DB_NAME,
+			'execute'  => "SELECT option_value FROM {$table_prefix}options WHERE option_name='home'",
+		);
+
+		if ( defined( 'DB_CHARSET' ) && constant( 'DB_CHARSET' ) ) {
+			$assoc_args['default-character-set'] = constant( 'DB_CHARSET' );
+		}
+		$cmd         = '/usr/bin/env mysql --no-defaults --no-auto-rehash --skip-column-names';
+		$descriptors = array(
+			0 => STDIN,
+			1 => array( 'pipe', 'w' ),
+			2 => array( 'pipe', 'w' ),
+		);
+		if ( isset( $assoc_args['host'] ) ) {
+			//@codingStandardsIgnoreStart
+			$assoc_args = array_merge( $assoc_args, Utils\mysql_host_to_cli_args( $assoc_args['host'] ) );
+			//@codingStandardsIgnoreEnd
+		}
+
+		$pass = $assoc_args['pass'];
+		unset( $assoc_args['pass'] );
+
+		$old_pass = getenv( 'MYSQL_PWD' );
+		putenv( 'MYSQL_PWD=' . $pass );
+
+		$final_cmd = Utils\force_env_on_nix_systems( $cmd ) . Utils\assoc_args_to_str( $assoc_args );
+
+		$proc = proc_open( $final_cmd, $descriptors, $pipes );
+		if ( ! $proc ) {
+			WP_CLI::error( 'Failed to open MySQL process.' );
+			exit( 1 );
+		}
+
+		$retval = stream_get_contents( $pipes[1] );
+		fclose( $pipes[1] );
+
+		$r = proc_close( $proc );
+
+		putenv( 'MYSQL_PWD=' . $old_pass );
+
+		if ( $r ) {
+			WP_CLI::error( 'Failed to execute MySQL query.' );
+		}
+		return $retval;
 	}
 
 }
