@@ -1,4 +1,7 @@
 <?php
+/**
+ * Registers the WP-CLI command.
+ */
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
@@ -12,7 +15,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		)
 	);
 
-	// Hack because WP-CLI doesn't like commands registered to 'core' that run on before_wp_load
+	// Hack because WP-CLI doesn't like commands registered to 'core' that run on before_wp_load.
 	WP_CLI::add_hook(
 		'find_command_to_run_pre', function() {
 			WP_CLI::add_command(
