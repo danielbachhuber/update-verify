@@ -217,12 +217,15 @@ class CLI {
 		$retval = stream_get_contents( $pipes[1] );
 		fclose( $pipes[1] );
 
+		$stderr = stream_get_contents( $pipes[2] );
+		fclose( $pipes[2] );
+
 		$r = proc_close( $proc );
 
 		putenv( 'MYSQL_PWD=' . $old_pass );
 
 		if ( $r ) {
-			WP_CLI::error( 'Failed to execute MySQL query.' );
+			WP_CLI::error( 'Failed to execute MySQL query: ' . $stderr );
 		}
 		return $retval;
 	}
