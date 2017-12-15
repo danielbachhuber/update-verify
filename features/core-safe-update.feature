@@ -230,3 +230,13 @@ Feature: Safely update WordPress core
       """
       Error: Requests Exception -
       """
+
+  Scenario: Catches MySQL query failure
+    Given "4.6" replaced with "3.6" in the wp-includes/version.php file
+    And "'wp_cli_test'" replaced with "'wp_cli_fail'" in the wp-config.php file
+
+    When I try `wp core safe-update --version=4.2`
+    Then STDERR should contain:
+      """
+      Error: Failed to execute MySQL query:
+      """
