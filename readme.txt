@@ -17,6 +17,8 @@ Verifies the WordPress update process by comparing heuristics about the WordPres
 * Whether or not a PHP fatal error is detected.
 * Whether or not the closing `</body>` tag is detected.
 
+= Reporting mode =
+
 By default, Update Verify operates in a reporting mode; these heuristics are output alongside standard web or CLI update output.
 
     $ wp core update --path=/path/to/wordpress
@@ -34,7 +36,15 @@ By default, Update Verify operates in a reporting mode; these heuristics are out
     No files found that need cleaning up.
     Success: WordPress updated successfully.
 
-To use the heuristics to influence the update process, run the `wp core safe-update` WP-CLI update command instead. Under the hood, this WP-CLI command aborts the update process if it detects WordPress to already be broken, and rolls back to the prior WordPress version if the update process caused detectable breakage.
+= WP-CLI command =
+
+To use the heuristics to influence the update process, run the `wp core safe-update` WP-CLI update command instead.
+
+Under the hood, this WP-CLI command aborts the update process if it detects WordPress to already be broken, and rolls back to the prior WordPress version if the update process caused detectable breakage.
+
+For WordPress installations older than 3.7, `wp core safe-update` will first use `wp core download` to bring the installation up to WordPress 3.7, and then use WordPress' internal upgrade process for the remaining update.
+
+Here's an example of what you might see running `wp core safe-update`:
 
     ###
     # 500 status code observed while updating from WP 4.6 to 4.9, and causes rollback.
