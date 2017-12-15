@@ -48,6 +48,12 @@ class CLI {
 
 		WP_CLI::log( 'Currently running version ' . $current_version );
 
+		if ( ! empty( $assoc_args['version'] )
+			&& version_compare( $assoc_args['version'], $current_version, '<=' ) ) {
+			WP_CLI::success( 'WordPress is already at a newer version.' );
+			return;
+		}
+
 		$is_site_response_errored = function( $site_response, $stage ) {
 			if ( 200 !== $site_response['status_code'] ) {
 				return sprintf( 'Failed %s-update status code check (HTTP code %d).', $stage, $site_response['status_code'] );

@@ -20,6 +20,21 @@ Feature: Safely update WordPress core
       Success: WordPress updated successfully.
       """
 
+  Scenario: core safe-update with WordPress already on a newer version
+    When I run `wp core safe-update --version=4.5.4`
+    Then STDOUT should be:
+      """
+      Currently running version 4.6
+      Success: WordPress is already at a newer version.
+      """
+
+    When I run `wp core safe-update --version=4.6`
+    Then STDOUT should be:
+      """
+      Currently running version 4.6
+      Success: WordPress is already at a newer version.
+      """
+
   Scenario: core safe-update with --version updates WordPress successfully
     When I run `wp core safe-update --version=4.7.4`
     Then STDOUT should contain:
