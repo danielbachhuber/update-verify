@@ -215,3 +215,18 @@ Feature: Safely update WordPress core
       """
       4.2
       """
+
+  Scenario: Catches Request exception on failed DNS resolution
+    When I run `wp core download --version=4.0 --force`
+    And I run `wp option update home 'http://foobar.example.com'`
+    And "4.0" replaced with "3.6" in the wp-includes/version.php file
+    Then STDOUT should contain:
+      """
+      Success:
+      """
+
+    When I try `wp core safe-update --version=4.2`
+    Then STDERR should contain:
+      """
+      Error: Requests Exception -
+      """

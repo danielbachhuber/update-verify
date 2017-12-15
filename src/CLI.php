@@ -72,7 +72,11 @@ class CLI {
 			if ( empty( $home_url ) ) {
 				WP_CLI::error( 'No home URL found from database connection.' );
 			}
-			$site_response = Observer::check_site_response( $home_url );
+			try {
+				$site_response = Observer::check_site_response( $home_url );
+			} catch( \Requests_Exception $e ) {
+				WP_CLI::error( 'Requests Exception - ' . $e->getMessage() );
+			}
 			$is_errored    = $is_site_response_errored( $site_response, 'pre' );
 			if ( $is_errored ) {
 				WP_CLI::error( $is_errored );
@@ -82,7 +86,11 @@ class CLI {
 					'launch' => true,
 				)
 			);
-			$site_response = Observer::check_site_response( $home_url );
+			try {
+				$site_response = Observer::check_site_response( $home_url );
+			} catch( \Requests_Exception $e ) {
+				WP_CLI::error( 'Requests Exception - ' . $e->getMessage() );
+			}
 			$is_errored    = $is_site_response_errored( $site_response, 'post' );
 			if ( $is_errored ) {
 				WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
