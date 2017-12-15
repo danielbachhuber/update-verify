@@ -74,10 +74,10 @@ class CLI {
 			}
 			try {
 				$site_response = Observer::check_site_response( $home_url );
-			} catch( \Requests_Exception $e ) {
+			} catch ( \Requests_Exception $e ) {
 				WP_CLI::error( 'Requests Exception - ' . $e->getMessage() );
 			}
-			$is_errored    = $is_site_response_errored( $site_response, 'pre' );
+			$is_errored = $is_site_response_errored( $site_response, 'pre' );
 			if ( $is_errored ) {
 				WP_CLI::error( $is_errored );
 			}
@@ -88,10 +88,10 @@ class CLI {
 			);
 			try {
 				$site_response = Observer::check_site_response( $home_url );
-			} catch( \Requests_Exception $e ) {
+			} catch ( \Requests_Exception $e ) {
 				WP_CLI::error( 'Requests Exception - ' . $e->getMessage() );
 			}
-			$is_errored    = $is_site_response_errored( $site_response, 'post' );
+			$is_errored = $is_site_response_errored( $site_response, 'post' );
 			if ( $is_errored ) {
 				WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
 				WP_CLI::runcommand(
