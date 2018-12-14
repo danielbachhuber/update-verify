@@ -20,7 +20,7 @@ Feature: Update verification passes
       4.8
       """
 
-    When I run `wp core update`
+    When I run `wp core update --minor`
     Then STDOUT should contain:
       """
       Fetching pre-update site response...
