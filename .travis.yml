@@ -48,7 +48,7 @@ before_script:
     if [[ "$WP_TRAVISCI" == "behat" ]] ; then
       composer install
       composer global require consolidation/cgr
-      cgr -n wp-cli/wp-cli:dev-master
+      cgr -n wp-cli/wp-cli-bundle
       cgr -n "behat/behat=~2.5"
       bash bin/install-package-tests.sh
     fi
