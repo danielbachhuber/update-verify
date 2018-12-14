@@ -25,12 +25,12 @@ By default, Update Verify operates in a reporting mode; these heuristics are out
     Updating to version 4.9.1 (en_US)...
     Fetching pre-update site response...
      -> HTTP status code: 200
-     -> Detected closing </body> tag.
+     -> Correctly detected closing </body> tag.
      -> No uncaught fatal error detected.
     Unpacking the update...
     Fetching post-update site response...
      -> HTTP status code: 200
-     -> Detected closing </body> tag.
+     -> Correctly detected closing </body> tag.
      -> No uncaught fatal error detected.
     Cleaning up files...
     No files found that need cleaning up.
@@ -54,7 +54,7 @@ Here's an example of what you might see running `wp core safe-update`:
     Updating to version 4.9.1 (en_US)...
     Fetching pre-update site response...
      -> HTTP status code: 200
-     -> Detected closing </body> tag.
+     -> Correctly detected closing </body> tag.
      -> No uncaught fatal error detected.
     Unpacking the update...
     Fetching post-update site response...
@@ -84,6 +84,9 @@ Installing as a plugin to means Update Verify can also be executed during web-ba
 Both installation methods expose the `wp core safe-update` WP-CLI command, which requires WP-CLI 1.5.0-alpha-d71d228 or newer.
 
 ## Changelog ##
+
+### 0.1.1 (??? ??, 2018) ###
+* Updated 'closing </body> tag' detection message to clarify it's a success.
 
 ### 0.1.0 (??? ??, 2017) ###
 * Initial release.

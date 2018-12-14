@@ -83,7 +83,7 @@ class Observer {
 			self::log_message( ' -> No closing </body> tag detected.' );
 			$site_response['closing_body'] = false;
 		} else {
-			self::log_message( ' -> Detected closing </body> tag.' );
+			self::log_message( ' -> Correctly detected closing </body> tag.' );
 			$site_response['closing_body'] = true;
 		}
 		$stripped_body = strip_tags( $response['body'] );
