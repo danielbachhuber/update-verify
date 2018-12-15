@@ -111,7 +111,8 @@ class Observer {
 			);
 		}
 		$response = wp_remote_post(
-			get_option( 'home' ), array(
+			get_option( 'home' ),
+			array(
 				'timeout' => 5,
 			)
 		);

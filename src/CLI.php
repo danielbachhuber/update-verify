@@ -82,7 +82,8 @@ class CLI {
 				WP_CLI::error( $is_errored );
 			}
 			WP_CLI::runcommand(
-				'core download --skip-content --force --version=3.7', array(
+				'core download --skip-content --force --version=3.7',
+				array(
 					'launch' => true,
 				)
 			);
@@ -95,7 +96,8 @@ class CLI {
 			if ( $is_errored ) {
 				WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
 				WP_CLI::runcommand(
-					'core download --skip-content --force --version=' . $current_version, array(
+					'core download --skip-content --force --version=' . $current_version,
+					array(
 						'launch' => true,
 					)
 				);
@@ -111,20 +113,24 @@ class CLI {
 		 * Bail early if any errors are detected with the site.
 		 */
 		WP_CLI::add_wp_hook(
-			'upgrade_verify_upgrader_pre_download', function( $retval, $site_response ) use ( $is_site_response_errored ) {
+			'upgrade_verify_upgrader_pre_download',
+			function( $retval, $site_response ) use ( $is_site_response_errored ) {
 				$is_errored = $is_site_response_errored( $site_response, 'pre' );
 				if ( $is_errored ) {
 					return new \WP_Error( 'upgrade_verify_fail', $is_errored );
 				}
 				return $retval;
-			}, 10, 2
+			},
+			10,
+			2
 		);
 
 		/**
 		 * Roll back to prior version if errors were detected post-update.
 		 */
 		WP_CLI::add_wp_hook(
-			'upgrade_verify_upgrader_process_complete', function( $site_response ) use ( $current_version, $is_site_response_errored ) {
+			'upgrade_verify_upgrader_process_complete',
+			function( $site_response ) use ( $current_version, $is_site_response_errored ) {
 				$is_errored = $is_site_response_errored( $site_response, 'post' );
 				if ( $is_errored ) {
 					if ( method_exists( 'WP_Upgrader', 'release_lock' ) ) {
@@ -132,7 +138,8 @@ class CLI {
 					}
 					WP_CLI::log( "Rolling WordPress back to version {$current_version}..." );
 					WP_CLI::runcommand(
-						'core download --skip-content --force --version=' . $current_version, array(
+						'core download --skip-content --force --version=' . $current_version,
+						array(
 							'launch' => false,
 						)
 					);
@@ -143,7 +150,8 @@ class CLI {
 
 		$update_version = ! empty( $assoc_args['version'] ) ? ' --version=' . $assoc_args['version'] : '';
 		$response       = WP_CLI::runcommand(
-			'core update' . $update_version, array(
+			'core update' . $update_version,
+			array(
 				'launch' => false,
 			)
 		);
