@@ -85,8 +85,5 @@ Both installation methods expose the `wp core safe-update` WP-CLI command, which
 
 == Changelog ==
 
-### 0.1.1 (??? ??, 2018) ###
-* Updated 'closing </body> tag' detection message to clarify it's a success.
-
 = 0.1.0 (??? ??, 2017) =
 * Initial release.
