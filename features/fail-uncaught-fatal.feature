@@ -27,7 +27,7 @@ Feature: Verification fails when there's an uncaught fatal
       """
       Fetching pre-update site response...
        -> HTTP status code: 200
-       -> Detected closing </body> tag.
+       -> Correctly detected closing </body> tag.
        -> No uncaught fatal error detected.
       """
     And STDOUT should contain:
